@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Message for Raymon Chawla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/TextPlugin.min.js"></script>
+
+<style>
+/* ======== RESET & BASE ======== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #060612;
+  --deep: #0a0a1e;
+  --purple: #1a0a2e;
+  --gold: #f5c842;
+  --gold2: #ffd700;
+  --green: #00ff88;
+  --neon-blue: #00d4ff;
+  --red: #ff4466;
+  --yellow: #ffdd00;
+  --text: #e8e8f0;
+  --muted: #6b6b8a;
+  --card-back: #12122a;
+  --card-border: #2a2a4a;
+}
+
+html { scroll-behavior: auto; }
+
+body {
+  background: var(--navy);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+#cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: difference;
+}
+#cursor-ring {
+  position: fixed;
+  width: 40px; height: 40px;
+  border: 1px solid rgba(245,200,66,0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+/* ======== PROGRESS TRACKER ======== */
+#progress-tracker {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+}
+.progress-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  background: transparent;
+  transition: all 0.4s;
+  position: relative;
+}
+.progress-dot.done {
+  background: var(--green);
+  border-color: var(--green);
+  box-shadow: 0 0 10px var(--green);
+}
+.progress-dot::before {
+  content: attr(data-label);
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.progress-dot:hover::before { opacity: 1; }
+
+/* ======== SOUND BUTTON ======== */
+#sound-btn {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  z-index: 500;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: none;
+  transition: all 0.3s;
+  opacity: 0;
+  letter-spacing: 0.05em;
+}
+#sound-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.3); }
+#sound-btn.active { color: var(--gold); border-color: var(--gold); }
+
+/* ======== PRELOADER ======== */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+.loader-orb {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold) 0%, #ff6b35 50%, transparent 70%);
+  animation: pulse-orb 1.5s ease-in-out infinite;
+  box-shadow: 0 0 40px var(--gold), 0 0 80px rgba(245,200,66,0.3);
+}
+@keyframes pulse-orb {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+.loader-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.loader-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+@keyframes dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+/* ======== SECTIONS (general) ======== */
+section {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ======== HERO ======== */
+#section-hero {
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#hero-canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+}
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 800px;
+  padding: 40px;
+}
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 32px;
+  opacity: 0;
+}
+#hero-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 10vw, 120px);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  min-height: 2.2em;
+}
+.hero-sub {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(16px, 2.5vw, 22px);
+  color: var(--muted);
+  margin-top: 28px;
+  opacity: 0;
+}
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+.scroll-arrow {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+@keyframes scroll-bounce {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50% { transform: scaleY(0.6); opacity: 0.4; }
+}
+
+/* ======== MYSTERY SECTION ======== */
+#section-mystery {
+  background: linear-gradient(180deg, var(--navy) 0%, var(--purple) 50%, #0d0d2b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 60px;
+  padding: 120px 40px;
+}
+.mystery-words-container {
+  max-width: 700px;
+  text-align: center;
+}
+.mystery-word {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 4vw, 42px);
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateX(-60px);
+  display: inline-block;
+  margin: 4px 8px;
+}
+.mystery-word.right { transform: translateX(60px); }
+
+.silhouette-container {
+  position: relative;
+  opacity: 0;
+}
+.silhouette {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  filter: blur(18px);
+}
+.silhouette-head {
+  width: 70px; height: 70px;
+  background: #3a3a5a;
+  border-radius: 50%;
+}
+.silhouette-body {
+  width: 100px; height: 110px;
+  background: #3a3a5a;
+  border-radius: 50px 50px 20px 20px;
+}
+
+/* ======== TASK HEADER LABEL ======== */
+.task-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* ======== GAME MODAL ======== */
+.game-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+.modal-box {
+  max-width: 480px;
+  width: 90%;
+  background: var(--card-back);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 48px 40px;
+  text-align: center;
+}
+.modal-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: block;
+}
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 0.05em;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.modal-desc {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+.modal-desc strong { color: var(--text); }
+.btn-primary {
+  background: var(--gold);
+  color: #000;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  padding: 14px 36px;
+  border-radius: 8px;
+  cursor: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(245,200,66,0.4);
+}
+
+/* ======== SCROLL BLOCKER ======== */
+.scroll-blocker {
+  position: fixed;
+  inset: 0;
+  z-index: 700;
+  pointer-events: none;
+}
+.scroll-blocker.active { pointer-events: all; }
+
+/* ======== TASK 1 — MEMORY GAME ======== */
+#section-task1 {
+  background: linear-gradient(135deg, #0d0d2b 0%, #0a1a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+.game-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.game-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(32px, 6vw, 56px);
+  letter-spacing: 0.05em;
+  color: var(--text);
+}
+.game-meta {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+}
+.game-meta span { color: var(--green); }
+
+#memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 480px;
+  width: 100%;
+  perspective: 1000px;
+}
+
+.memory-card {
+  aspect-ratio: 1;
+  position: relative;
+  cursor: none;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.memory-card.flipped { transform: rotateY(180deg); }
+.memory-card.matched { transform: rotateY(180deg); }
+.memory-card.matched .card-back {
+  border-color: var(--green);
+  box-shadow: 0 0 20px rgba(0,255,136,0.4);
+}
+.card-front, .card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-front {
+  background: var(--card-back);
+  border: 1px solid var(--card-border);
+  font-size: 28px;
+  user-select: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.card-front:hover {
+  border-color: rgba(245,200,66,0.4);
+  box-shadow: 0 0 20px rgba(245,200,66,0.1);
+}
+.card-back {
+  background: linear-gradient(135deg, #1a1a35, #0d0d20);
+  border: 1px solid var(--card-border);
+  transform: rotateY(180deg);
+  font-size: 28px;
+  user-select: none;
+}
+.card-back::before {
+  content: '?';
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+.card-question {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* ======== CLUE SECTION ======== */
+#section-clues {
+  background: #050f05;
+  min-height: 100vh;
+  overflow: hidden;
+}
+.clues-wrapper {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+.clues-track {
+  display: flex;
+  gap: 0;
+  width: max-content;
+}
+.clue-panel {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 60px;
+}
+.clue-card {
+  max-width: 500px;
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 16px;
+  padding: 48px 40px;
+  position: relative;
+  background: rgba(0,255,136,0.03);
+  transform: rotateY(20deg) scale(0.9);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.5s;
+}
+.clue-card.visible { transform: rotateY(0deg) scale(1); opacity: 1; }
+.clue-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--green);
+  margin-bottom: 20px;
+}
+.clue-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(15px, 2.5vw, 20px);
+  line-height: 1.7;
+  color: rgba(0,255,136,0.9);
+}
+.clue-icon {
+  position: absolute;
+  top: -20px;
+  right: 30px;
+  font-size: 36px;
+  background: #050f05;
+  padding: 4px 12px;
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 8px;
+}
+.clues-label {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(0,255,136,0.5);
+  z-index: 10;
+}
+/* Mobile clues */
+@media (max-width: 768px) {
+  .clues-track { flex-direction: column; width: 100%; padding: 60px 24px; }
+  .clue-panel { width: 100%; height: auto; padding: 20px 0; }
+  .clue-card { transform: none; opacity: 1; }
+}
+
+/* ======== TASK 2 — SIMON SAYS ======== */
+#section-task2 {
+  background: linear-gradient(135deg, #0a0a1e 0%, #1a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 60px 20px;
+  gap: 40px;
+}
+.simon-status {
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+.simon-status .round-num {
+  font-size: 28px;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  display: block;
+  margin-top: 4px;
+}
+#simon-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 360px;
+  width: 100%;
+}
+.simon-btn {
+  aspect-ratio: 1;
+  border-radius: 20px;
+  border: none;
+  cursor: none;
+  transition: filter 0.1s, transform 0.1s;
+  position: relative;
+  overflow: hidden;
+}
+.simon-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.simon-btn.lit::after { opacity: 1; }
+.simon-btn.lit { filter: brightness(2) saturate(1.5); transform: scale(0.97); }
+.simon-btn[data-color="blue"] {
+  background: #0044ff;
+  box-shadow: 0 0 40px rgba(0,68,255,0.4);
+}
+.simon-btn[data-color="red"] {
+  background: #ff2244;
+  box-shadow: 0 0 40px rgba(255,34,68,0.4);
+}
+.simon-btn[data-color="green"] {
+  background: #00cc44;
+  box-shadow: 0 0 40px rgba(0,204,68,0.4);
+}
+.simon-btn[data-color="yellow"] {
+  background: #ffcc00;
+  box-shadow: 0 0 40px rgba(255,204,0,0.4);
+}
+.simon-msg {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  min-height: 20px;
+  transition: color 0.3s;
+}
+.simon-msg.error { color: var(--red); }
+.simon-msg.success { color: var(--green); }
+
+/* ======== EVIDENCE SECTION ======== */
+#section-evidence {
+  background: linear-gradient(180deg, #0d0d2b 0%, #0a0a1e 100%);
+  padding: 100px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+.evidence-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 6vw, 72px);
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: var(--text);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: 800px;
+  width: 100%;
+}
+@media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; gap: 24px; } }
+.stat-item {
+  text-align: center;
+  padding: 32px;
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.02);
+  opacity: 0;
+  transform: translateY(30px);
+}
+.stat-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 5vw, 60px);
+  letter-spacing: 0.03em;
+  color: var(--gold);
+  display: block;
+  line-height: 1;
+}
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+  display: block;
+}
+
+.github-graph-container {
+  max-width: 700px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(30px);
+}
+.github-graph-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  margin-bottom: 12px;
+  text-align: center;
+}
+#github-graph { width: 100%; }
+.gh-cell { fill: #161b22; }
+.gh-cell.level-1 { fill: #0e4429; }
+.gh-cell.level-2 { fill: #006d32; }
+.gh-cell.level-3 { fill: #26a641; }
+.gh-cell.level-4 { fill: #39d353; }
+
+.evidence-quote {
+  max-width: 600px;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(18px, 3vw, 26px);
+  line-height: 1.6;
+  color: var(--text);
+  position: relative;
+  opacity: 0;
+}
+.evidence-quote::before {
+  content: '"';
+  font-size: 120px;
+  color: var(--gold);
+  opacity: 0.15;
+  position: absolute;
+  top: -40px;
+  left: -20px;
+  line-height: 1;
+  font-family: 'Playfair Display', serif;
+}
+
+/* ======== TASK 3 — RIDDLES ======== */
+#section-task3 {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 60px 20px;
+}
+.terminal-window {
+  max-width: 640px;
+  width: 100%;
+  background: #0a0f0a;
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0,255,136,0.05), 0 40px 80px rgba(0,0,0,0.8);
+}
+.terminal-bar {
+  background: #111;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(0,255,136,0.1);
+}
+.terminal-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.terminal-dot:nth-child(1) { background: #ff5f57; }
+.terminal-dot:nth-child(2) { background: #febc2e; }
+.terminal-dot:nth-child(3) { background: #28c840; }
+.terminal-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 8px;
+  letter-spacing: 0.1em;
+}
+.terminal-body {
+  padding: 32px;
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 400px;
+}
+.terminal-prompt {
+  color: var(--green);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.terminal-prompt .prompt-symbol { color: var(--gold); }
+.riddle-text {
+  color: rgba(0,255,136,0.8);
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  min-height: 50px;
+}
+.riddle-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(0,255,136,0.3);
+  padding-bottom: 4px;
+}
+.riddle-input-row .prompt-sym { color: var(--green); font-size: 15px; }
+.riddle-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  color: var(--green);
+  caret-color: var(--green);
+}
+.riddle-input::placeholder { color: rgba(0,255,136,0.2); }
+.riddle-feedback {
+  margin-top: 14px;
+  font-size: 13px;
+  min-height: 20px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.riddle-feedback.correct { color: var(--green); }
+.riddle-feedback.wrong { color: var(--red); }
+.riddle-progress {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(0,255,136,0.4);
+  margin-bottom: 24px;
+  letter-spacing: 0.2em;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+.riddle-input-row.shake { animation: shake 0.4s ease; }
+.riddle-input-row.glow {
+  border-color: var(--green);
+  box-shadow: 0 4px 20px rgba(0,255,136,0.2);
+}
+
+/* ======== BUILDUP SECTION ======== */
+#section-buildup {
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 40px;
+  padding: 80px 40px;
+}
+.buildup-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 8vw, 100px);
+  letter-spacing: 0.05em;
+  color: var(--text);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(40px);
+}
+.buildup-sub {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(18px, 3vw, 28px);
+  color: var(--muted);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.countdown-container {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  margin-top: 20px;
+}
+.countdown-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 15vw, 180px);
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0.5);
+}
+.countdown-num:nth-child(1) { color: var(--red); }
+.countdown-num:nth-child(2) { color: var(--gold); }
+.countdown-num:nth-child(3) { color: var(--green); }
+
+/* ======== REVEAL SECTION ======== */
+#section-reveal {
+  background: linear-gradient(135deg, #0a0a00, #1a1200, #0a0800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+  padding: 80px 40px;
+  position: relative;
+  min-height: 100vh;
+}
+#confetti-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.reveal-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  position: relative;
+  z-index: 10;
+}
+.reveal-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 12vw, 140px);
+  line-height: 0.9;
+  letter-spacing: 0.05em;
+  text-align: center;
+  background: linear-gradient(135deg, #f5c842, #ffd700, #f0a500, #ffd700, #f5c842);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gold-shimmer 3s linear infinite;
+  opacity: 0;
+  transform: scale(0.3) translateY(60px);
+  position: relative;
+  z-index: 10;
+}
+@keyframes gold-shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+.reveal-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(18px, 3vw, 32px);
+  color: var(--text);
+  text-align: center;
+  max-width: 600px;
+  opacity: 0;
+  min-height: 40px;
+  position: relative;
+  z-index: 10;
+}
+.reveal-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  position: relative;
+  z-index: 10;
+}
+.avatar-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.avatar-head {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3a3a5a, #5a5a8a);
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 30px rgba(245,200,66,0.4);
+}
+.avatar-body {
+  width: 120px; height: 130px;
+  background: linear-gradient(135deg, #3a3a5a, #5a5a8a);
+  border-radius: 60px 60px 20px 20px;
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 30px rgba(245,200,66,0.4);
+}
+.avatar-badge {
+  margin-top: 12px;
+  background: var(--gold);
+  color: #000;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 20px;
+}
+.reveal-message {
+  max-width: 560px;
+  text-align: center;
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.8;
+  color: rgba(232,232,240,0.75);
+  opacity: 0;
+  position: relative;
+  z-index: 10;
+}
+.share-btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: none;
+  transition: all 0.3s;
+  opacity: 0;
+  position: relative;
+  z-index: 10;
+}
+.share-btn:hover {
+  background: var(--gold);
+  color: #000;
+  box-shadow: 0 8px 30px rgba(245,200,66,0.3);
+}
+.share-tooltip {
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--green);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.share-btn:hover .share-tooltip { opacity: 1; }
+.star-burst {
+  position: absolute;
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0;
+}
+
+/* ======== WIN OVERLAY ======== */
+#win-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  z-index: 9000;
+  pointer-events: none;
+  transition: background 0.3s;
+}
+#win-overlay.flash {
+  animation: win-flash 0.6s ease;
+}
+@keyframes win-flash {
+  0% { background: rgba(0,255,136,0); }
+  30% { background: rgba(0,255,136,0.3); }
+  100% { background: rgba(0,255,136,0); }
+}
+
+/* ======== REDUCED MOTION ======== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Win Flash Overlay -->
+<div id="win-overlay"></div>
+
+<!-- Progress Tracker -->
+<div id="progress-tracker">
+  <div class="progress-dot" data-label="Memory Game" id="dot-1"></div>
+  <div class="progress-dot" data-label="Simon Says" id="dot-2"></div>
+  <div class="progress-dot" data-label="Code Riddles" id="dot-3"></div>
+</div>
+
+<!-- Sound Button -->
+<button id="sound-btn" onclick="toggleSound()">⚡ SOUND OFF</button>
+
+<!-- ======== PRELOADER ======== -->
+<div id="preloader">
+  <div class="loader-orb"></div>
+  <div class="loader-text">Loading something important<span class="loader-dots"></span></div>
+</div>
+
+<!-- ======== HERO ======== -->
+<section id="section-hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-eyebrow">// classified transmission</div>
+    <h1 id="hero-headline"></h1>
+    <p class="hero-sub">But first... you'll have to earn it.</p>
+  </div>
+  <div class="scroll-hint">
+    <span>SCROLL TO BEGIN</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ======== MYSTERY ======== -->
+<section id="section-mystery">
+  <div class="mystery-words-container">
+    <span class="mystery-word">There is...</span>
+    <span class="mystery-word right">a person...</span>
+    <span class="mystery-word">who writes code...</span>
+    <span class="mystery-word right">like poetry.</span>
+    <span class="mystery-word">Who solves problems...</span>
+    <span class="mystery-word right">like a grandmaster.</span>
+    <span class="mystery-word">Who ships things...</span>
+    <span class="mystery-word right">that actually work.</span>
+  </div>
+  <div class="silhouette-container" id="silhouette-container">
+    <div class="silhouette" id="silhouette">
+      <div class="silhouette-head"></div>
+      <div class="silhouette-body"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== TASK 1 — MEMORY GAME ======== -->
+<section id="section-task1">
+  <div class="task-label">// TASK 01 OF 03 — WARM UP YOUR MEMORY</div>
+  <div class="game-header">
+    <h2 class="game-title">MATCH THE STACK</h2>
+    <div class="game-meta">
+      Matched: <span id="match-count">0</span>/8 &nbsp;|&nbsp; Moves: <span id="move-count">0</span>
+    </div>
+  </div>
+  <div id="memory-grid"></div>
+</section>
+
+<!-- Game 1 Modal -->
+<div class="game-modal" id="modal-game1">
+  <div class="modal-box">
+    <span class="modal-icon">🧠</span>
+    <h2 class="modal-title">MEMORY TEST</h2>
+    <p class="modal-desc">
+      A 4×4 grid of <strong>tech-themed cards</strong> awaits.<br><br>
+      Flip two at a time. Find all <strong>8 matching pairs</strong> to unlock the next secret.<br><br>
+      Remember what you've seen. Engineers don't forget.
+    </p>
+    <button class="btn-primary" onclick="startGame1()">I'M READY →</button>
+  </div>
+</div>
+
+<!-- ======== CLUES ======== -->
+<section id="section-clues">
+  <div class="clues-label">// FIELD INTELLIGENCE</div>
+  <div class="clues-wrapper">
+    <div class="clues-track" id="clues-track">
+      <div class="clue-panel">
+        <div class="clue-card" id="clue-1">
+          <span class="clue-icon">🌙</span>
+          <div class="clue-number">// EVIDENCE 01</div>
+          <p class="clue-text">Once debugged a production incident at 2am — and still pushed clean, reviewed, documented code before sunrise.</p>
+        </div>
+      </div>
+      <div class="clue-panel">
+        <div class="clue-card" id="clue-2">
+          <span class="clue-icon">⚡</span>
+          <div class="clue-number">// EVIDENCE 02</div>
+          <p class="clue-text">Pull requests reviewed and merged within hours. Every time. No exceptions. The team moves because they move.</p>
+        </div>
+      </div>
+      <div class="clue-panel">
+        <div class="clue-card" id="clue-3">
+          <span class="clue-icon">🔬</span>
+          <div class="clue-number">// EVIDENCE 03</div>
+          <p class="clue-text">They don't just fix bugs. They find the root cause, eliminate the entire class of failure, and write the test to prove it.</p>
+        </div>
+      </div>
+      <div class="clue-panel">
+        <div class="clue-card" id="clue-4">
+          <span class="clue-icon">🚀</span>
+          <div class="clue-number">// EVIDENCE 04</div>
+          <p class="clue-text">Has never once said "it works on my machine." Because their code simply works — everywhere, every time, first time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== TASK 2 — SIMON SAYS ======== -->
+<section id="section-task2">
+  <div class="task-label">// TASK 02 OF 03 — TEST YOUR PATTERN RECOGNITION</div>
+  <div class="game-header">
+    <h2 class="game-title">PATTERN LOCK</h2>
+  </div>
+  <div class="simon-status">
+    CURRENT ROUND
+    <span class="round-num" id="simon-round">—</span>
+  </div>
+  <div id="simon-grid">
+    <button class="simon-btn" data-color="blue" data-freq="261" onclick="simonClick('blue')"></button>
+    <button class="simon-btn" data-color="red" data-freq="329" onclick="simonClick('red')"></button>
+    <button class="simon-btn" data-color="green" data-freq="392" onclick="simonClick('green')"></button>
+    <button class="simon-btn" data-color="yellow" data-freq="523" onclick="simonClick('yellow')"></button>
+  </div>
+  <p class="simon-msg" id="simon-msg">Watch the pattern carefully...</p>
+</section>
+
+<!-- Game 2 Modal -->
+<div class="game-modal" id="modal-game2">
+  <div class="modal-box">
+    <span class="modal-icon">🎯</span>
+    <h2 class="modal-title">PATTERN LOCK</h2>
+    <p class="modal-desc">
+      Four buttons. A computer will light them in a <strong>sequence</strong>.<br><br>
+      Repeat the pattern by clicking the same buttons in the same order.<br><br>
+      Complete <strong>5 rounds</strong> to crack the lock. Each round the sequence grows.
+    </p>
+    <button class="btn-primary" onclick="startGame2()">CRACK IT →</button>
+  </div>
+</div>
+
+<!-- ======== EVIDENCE ======== -->
+<section id="section-evidence">
+  <h2 class="evidence-title">THE EVIDENCE</h2>
+
+  <div class="stats-grid">
+    <div class="stat-item" id="stat-1">
+      <span class="stat-number" id="stat-lines">0</span>
+      <span class="stat-label">Lines of Code Written</span>
+    </div>
+    <div class="stat-item" id="stat-2">
+      <span class="stat-number" id="stat-bugs">0</span>
+      <span class="stat-label">Bugs Eliminated</span>
+    </div>
+    <div class="stat-item" id="stat-3">
+      <span class="stat-number" id="stat-coffee">0</span>
+      <span class="stat-label">Coffees Consumed</span>
+    </div>
+  </div>
+
+  <div class="github-graph-container" id="github-container">
+    <div class="github-graph-label">// CONTRIBUTION ACTIVITY — RAYMON CHAWLA</div>
+    <svg id="github-graph" viewBox="0 0 700 120" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <p class="evidence-quote" id="evidence-quote">
+    "The best code doesn't need comments to explain itself. They write that kind."
+  </p>
+</section>
+
+<!-- ======== TASK 3 — RIDDLES ======== -->
+<section id="section-task3">
+  <div class="task-label">// TASK 03 OF 03 — THINK LIKE AN ENGINEER</div>
+  <div class="terminal-window">
+    <div class="terminal-bar">
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <span class="terminal-title">raymon@secret:~ — decode_challenge.sh</span>
+    </div>
+    <div class="terminal-body">
+      <div class="terminal-prompt"><span class="prompt-symbol">$</span> ./decode_challenge.sh --mode=riddle</div>
+      <br>
+      <div class="riddle-progress" id="riddle-progress">RIDDLE 1 OF 3</div>
+      <div class="riddle-text" id="riddle-text"></div>
+      <div class="riddle-input-row" id="riddle-input-row">
+        <span class="prompt-sym">›</span>
+        <input class="riddle-input" id="riddle-input" type="text" placeholder="type your answer..." autocomplete="off" spellcheck="false">
+      </div>
+      <div class="riddle-feedback" id="riddle-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Game 3 Modal -->
+<div class="game-modal" id="modal-game3">
+  <div class="modal-box">
+    <span class="modal-icon">🔐</span>
+    <h2 class="modal-title">DECODE CHALLENGE</h2>
+    <p class="modal-desc">
+      Three riddles stand between you and the truth.<br><br>
+      Each one requires <strong>engineering thinking</strong>. No trick questions — just patterns, logic, and code.<br><br>
+      Unlimited attempts. Think before you type.
+    </p>
+    <button class="btn-primary" onclick="startGame3()">ACCEPT THE CHALLENGE →</button>
+  </div>
+</div>
+
+<!-- ======== BUILDUP ======== -->
+<section id="section-buildup">
+  <h2 class="buildup-text" id="buildup-text">ARE YOU READY?</h2>
+  <p class="buildup-sub" id="buildup-sub">The secret is right on the other side.</p>
+  <div class="countdown-container">
+    <span class="countdown-num" id="cd-3">3</span>
+    <span class="countdown-num" id="cd-2">2</span>
+    <span class="countdown-num" id="cd-1">1</span>
+  </div>
+</section>
+
+<!-- ======== REVEAL ======== -->
+<section id="section-reveal">
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="reveal-avatar" id="reveal-avatar">
+    <div class="avatar-figure">
+      <div class="avatar-head"></div>
+      <div class="avatar-body"></div>
+    </div>
+    <div class="avatar-badge">⭐ CERTIFIED GENIUS</div>
+  </div>
+
+  <div class="reveal-label" id="reveal-label">// THE SECRET HAS BEEN UNLOCKED</div>
+
+  <h2 class="reveal-name" id="reveal-name">RAYMON CHAWLA</h2>
+
+  <p class="reveal-subtitle" id="reveal-subtitle"></p>
+
+  <p class="reveal-message" id="reveal-message">
+    This wasn't a game. This was proof. You navigated every challenge, solved every puzzle, and cracked every code — because that's just what you do. You are, without question, a certified genius and an exceptional software engineer. The code you write, the problems you solve, the way your mind works... it's something rare. Don't ever doubt it.
+  </p>
+
+  <button class="share-btn" id="share-btn" onclick="shareSecret()">
+    <span class="share-tooltip">✓ Copied!</span>
+    SHARE THIS SECRET
+  </button>
+</section>
+
+<!-- ======== SCRIPTS ======== -->
+<script>
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+// ======== STATE ========
+const state = {
+  soundEnabled: false,
+  audioCtx: null,
+  task1Done: false,
+  task2Done: false,
+  task3Done: false,
+};
+
+// ======== CURSOR ========
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animCursor() {
+  rx += (mx - rx) * 0.15;
+  ry += (my - ry) * 0.15;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  cursorRing.style.left = rx + 'px';
+  cursorRing.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+})();
+document.querySelectorAll('button, .memory-card, .simon-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '20px'; cursor.style.height = '20px';
+    cursorRing.style.width = '60px'; cursorRing.style.height = '60px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px'; cursor.style.height = '12px';
+    cursorRing.style.width = '40px'; cursorRing.style.height = '40px';
+  });
+});
+
+// ======== SOUND ========
+function getAudioCtx() {
+  if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return state.audioCtx;
+}
+function playTone(freq, duration = 0.15, type = 'sine', vol = 0.3) {
+  if (!state.soundEnabled) return;
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.frequency.value = freq;
+  osc.type = type;
+  gain.gain.setValueAtTime(vol, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + duration);
+}
+function playWin() {
+  [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.3, 'sine', 0.3), i * 120));
+}
+function playFanfare() {
+  const notes = [523, 659, 784, 880, 1047, 1175, 1319, 1568];
+  notes.forEach((f, i) => setTimeout(() => playTone(f, 0.4, 'sine', 0.35), i * 100));
+  setTimeout(() => {
+    [523, 659, 784].forEach(f => {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = f;
+      osc.type = 'triangle';
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 1.5);
+    });
+  }, 900);
+}
+function toggleSound() {
+  state.soundEnabled = !state.soundEnabled;
+  const btn = document.getElementById('sound-btn');
+  btn.textContent = state.soundEnabled ? '🔊 SOUND ON' : '⚡ SOUND OFF';
+  btn.className = state.soundEnabled ? 'active' : '';
+  if (state.soundEnabled) { getAudioCtx(); playTone(440, 0.1); }
+}
+
+// ======== HERO CANVAS — NEURAL NETWORK ========
+(function initHeroCanvas() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [], W, H;
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  for (let i = 0; i < 70; i++) {
+    particles.push({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4,
+      r: Math.random()*2+1
+    });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(245,200,66,0.6)';
+      ctx.fill();
+    });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i+1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(245,200,66,${0.15*(1-dist/120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ======== GITHUB GRAPH ========
+(function buildGithubGraph() {
+  const svg = document.getElementById('github-graph');
+  const cols = 53, rows = 7;
+  const cellSize = 11, gap = 2, total = cols * rows;
+  const levels = [0,1,2,3,4];
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows; r++) {
+      const rand = Math.random();
+      const level = rand < 0.35 ? 0 : rand < 0.5 ? 1 : rand < 0.7 ? 2 : rand < 0.88 ? 3 : 4;
+      const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x', c*(cellSize+gap));
+      rect.setAttribute('y', r*(cellSize+gap));
+      rect.setAttribute('width', cellSize);
+      rect.setAttribute('height', cellSize);
+      rect.setAttribute('rx', 2);
+      rect.setAttribute('class', 'gh-cell');
+      rect.setAttribute('data-level', level);
+      svg.appendChild(rect);
+    }
+  }
+})();
+
+// ======== CONFETTI ========
+let confettiRunning = false;
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const colors = ['#f5c842','#ffd700','#ff4466','#00ff88','#00d4ff','#ff6b35','#fff'];
+  const particles = [];
+  for (let i = 0; i < 420; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height * 0.5,
+      w: Math.random()*10+4, h: Math.random()*6+3,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      vx: (Math.random()-0.5)*6,
+      vy: Math.random()*4+2,
+      angle: Math.random()*360,
+      spin: (Math.random()-0.5)*8,
+      opacity: 1
+    });
+  }
+  confettiRunning = true;
+  function frame() {
+    if (!confettiRunning) return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive = false;
+    particles.forEach(p => {
+      if (p.y > canvas.height + 20) return;
+      alive = true;
+      p.x += p.vx; p.y += p.vy;
+      p.angle += p.spin;
+      p.vy += 0.08;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle * Math.PI/180);
+      ctx.globalAlpha = p.opacity;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if (alive) requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+// ======== PRELOADER ========
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    gsap.to('#preloader', {
+      opacity: 0, duration: 0.8, ease: 'power2.in',
+      onComplete: () => {
+        document.getElementById('preloader').style.display = 'none';
+        initAnimations();
+      }
+    });
+  }, 1600);
+});
+
+// ======== SCROLL BLOCKER ========
+let scrollBlocked = false;
+function blockScroll() {
+  scrollBlocked = true;
+  document.body.style.overflow = 'hidden';
+}
+function unblockScroll() {
+  scrollBlocked = false;
+  document.body.style.overflow = '';
+  ScrollTrigger.refresh();
+}
+
+// ======== MODAL HELPERS ========
+function showModal(id) {
+  document.getElementById(id).style.display = 'flex';
+  gsap.from('#'+id+' .modal-box', { y: 30, opacity: 0, duration: 0.5, ease: 'back.out(1.7)' });
+}
+function hideModal(id) {
+  gsap.to('#'+id, { opacity: 0, duration: 0.3, onComplete: () => {
+    document.getElementById(id).style.display = 'none';
+  }});
+}
+
+// ======== WIN FLASH ========
+function winFlash() {
+  const ov = document.getElementById('win-overlay');
+  ov.classList.add('flash');
+  setTimeout(() => ov.classList.remove('flash'), 600);
+}
+
+// ======== TASK COMPLETE ========
+function completeTask(n) {
+  document.getElementById('dot-'+n).classList.add('done');
+  winFlash();
+  playWin();
+  unblockScroll();
+  window.scrollBy({top: 200, behavior: 'smooth'});
+}
+
+// ======== GAME 1 — MEMORY ========
+const EMOJIS = ['🐍','⚛️','🦀','🐳','☁️','🔧','💡','🚀'];
+let g1 = { flipped: [], matched: 0, moves: 0, locked: false, cards: [] };
+
+function startGame1() {
+  hideModal('modal-game1');
+  buildMemoryGrid();
+}
+
+function buildMemoryGrid() {
+  const grid = document.getElementById('memory-grid');
+  grid.innerHTML = '';
+  let deck = [...EMOJIS, ...EMOJIS];
+  for (let i = deck.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [deck[i],deck[j]] = [deck[j],deck[i]];
+  }
+  g1 = { flipped: [], matched: 0, moves: 0, locked: false, cards: [] };
+  document.getElementById('match-count').textContent = '0';
+  document.getElementById('move-count').textContent = '0';
+  deck.forEach((emoji, idx) => {
+    const card = document.createElement('div');
+    card.className = 'memory-card';
+    card.dataset.emoji = emoji;
+    card.dataset.idx = idx;
+    card.innerHTML = `
+      <div class="card-front"><span class="card-question">?</span></div>
+      <div class="card-back">${emoji}</div>
+    `;
+    card.addEventListener('click', () => flipCard(card));
+    grid.appendChild(card);
+    g1.cards.push(card);
+  });
+}
+
+function flipCard(card) {
+  if (g1.locked) return;
+  if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  if (g1.flipped.length >= 2) return;
+  playTone(660, 0.08);
+  card.classList.add('flipped');
+  g1.flipped.push(card);
+  if (g1.flipped.length === 2) {
+    g1.moves++;
+    document.getElementById('move-count').textContent = g1.moves;
+    g1.locked = true;
+    const [a, b] = g1.flipped;
+    if (a.dataset.emoji === b.dataset.emoji) {
+      playTone(880, 0.15);
+      a.classList.add('matched');
+      b.classList.add('matched');
+      g1.matched++;
+      document.getElementById('match-count').textContent = g1.matched;
+      g1.flipped = [];
+      g1.locked = false;
+      if (g1.matched === 8) {
+        setTimeout(game1Win, 400);
+      }
+    } else {
+      playTone(200, 0.2, 'sawtooth', 0.15);
+      setTimeout(() => {
+        a.classList.remove('flipped');
+        b.classList.remove('flipped');
+        g1.flipped = [];
+        g1.locked = false;
+      }, 900);
+    }
+  }
+}
+
+function game1Win() {
+  state.task1Done = true;
+  // Wave animation
+  g1.cards.forEach((card, i) => {
+    gsap.to(card, { rotateY: 360, duration: 0.5, delay: i * 0.04, ease: 'back.inOut(1.7)' });
+  });
+  setTimeout(() => completeTask(1), g1.cards.length * 40 + 600);
+}
+
+// ======== GAME 2 — SIMON SAYS ========
+const SIMON_COLORS = ['blue','red','green','yellow'];
+const SIMON_FREQS = { blue: 261, red: 329, green: 392, yellow: 523 };
+let g2 = { sequence: [], playerSeq: [], round: 1, maxRounds: 5, playing: false, accepting: false };
+
+function startGame2() {
+  hideModal('modal-game2');
+  g2 = { sequence: [], playerSeq: [], round: 1, maxRounds: 5, playing: false, accepting: false };
+  document.getElementById('simon-round').textContent = '1 / 5';
+  document.getElementById('simon-msg').textContent = 'Get ready...';
+  document.getElementById('simon-msg').className = 'simon-msg';
+  setTimeout(nextSimonRound, 800);
+}
+
+function nextSimonRound() {
+  g2.accepting = false;
+  g2.playerSeq = [];
+  const next = SIMON_COLORS[Math.floor(Math.random()*4)];
+  g2.sequence.push(next);
+  document.getElementById('simon-round').textContent = g2.round + ' / ' + g2.maxRounds;
+  document.getElementById('simon-msg').textContent = 'Watch carefully...';
+  document.getElementById('simon-msg').className = 'simon-msg';
+  playSequence(g2.sequence, () => {
+    g2.accepting = true;
+    document.getElementById('simon-msg').textContent = 'Your turn! Repeat the pattern.';
+  });
+}
+
+function playSequence(seq, cb) {
+  let i = 0;
+  function flashNext() {
+    if (i >= seq.length) { setTimeout(cb, 400); return; }
+    const color = seq[i];
+    const btn = document.querySelector(`.simon-btn[data-color="${color}"]`);
+    btn.classList.add('lit');
+    playTone(SIMON_FREQS[color], 0.35);
+    setTimeout(() => {
+      btn.classList.remove('lit');
+      i++;
+      setTimeout(flashNext, 200);
+    }, 400);
+  }
+  setTimeout(flashNext, 500);
+}
+
+function simonClick(color) {
+  if (!g2.accepting) return;
+  const btn = document.querySelector(`.simon-btn[data-color="${color}"]`);
+  btn.classList.add('lit');
+  playTone(SIMON_FREQS[color], 0.2);
+  setTimeout(() => btn.classList.remove('lit'), 200);
+  g2.playerSeq.push(color);
+  const idx = g2.playerSeq.length - 1;
+  if (g2.playerSeq[idx] !== g2.sequence[idx]) {
+    // Wrong
+    g2.accepting = false;
+    const msg = document.getElementById('simon-msg');
+    msg.textContent = '✗ Wrong! Starting over from round 1...';
+    msg.className = 'simon-msg error';
+    playTone(120, 0.4, 'sawtooth', 0.2);
+    g2.sequence = [];
+    g2.round = 1;
+    setTimeout(() => {
+      msg.textContent = 'Get ready...';
+      msg.className = 'simon-msg';
+      setTimeout(nextSimonRound, 600);
+    }, 1200);
+    return;
+  }
+  if (g2.playerSeq.length === g2.sequence.length) {
+    g2.accepting = false;
+    if (g2.round >= g2.maxRounds) {
+      const msg = document.getElementById('simon-msg');
+      msg.textContent = '✓ Pattern cracked! Genius confirmed.';
+      msg.className = 'simon-msg success';
+      state.task2Done = true;
+      setTimeout(() => completeTask(2), 1000);
+    } else {
+      const msg = document.getElementById('simon-msg');
+      msg.textContent = '✓ Correct! Next round...';
+      msg.className = 'simon-msg success';
+      g2.round++;
+      setTimeout(nextSimonRound, 1000);
+    }
+  }
+}
+
+// ======== GAME 3 — RIDDLES ========
+const RIDDLES = [
+  {
+    q: "I am always 0 or 1. Never maybe. Never sometimes. What am I?",
+    a: ['bit','binary','boolean','bool']
+  },
+  {
+    q: "Developers spend more time reading me than writing me. I am not documentation. What am I?",
+    a: ['code','source code','sourcecode','codebase']
+  },
+  {
+    q: "I have a head and a tail, but no body. You don't find me in a coin — you chase me when things go wrong. What am I?",
+    a: ['stack trace','stacktrace','trace','stack_trace','call stack','callstack','log']
+  }
+];
+let g3 = { idx: 0 };
+
+function startGame3() {
+  hideModal('modal-game3');
+  g3.idx = 0;
+  showRiddle(0);
+  document.getElementById('riddle-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkRiddle();
+  });
+}
+
+function typewriterText(el, text, speed = 28) {
+  el.textContent = '';
+  let i = 0;
+  const interval = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, speed);
+}
+
+function showRiddle(idx) {
+  const prog = document.getElementById('riddle-progress');
+  const text = document.getElementById('riddle-text');
+  const input = document.getElementById('riddle-input');
+  const feedback = document.getElementById('riddle-feedback');
+  prog.textContent = `RIDDLE ${idx+1} OF ${RIDDLES.length}`;
+  input.value = '';
+  feedback.textContent = '';
+  feedback.className = 'riddle-feedback';
+  document.getElementById('riddle-input-row').className = 'riddle-input-row';
+  typewriterText(text, RIDDLES[idx].q, 30);
+  setTimeout(() => input.focus(), 200);
+}
+
+function checkRiddle() {
+  const input = document.getElementById('riddle-input');
+  const feedback = document.getElementById('riddle-feedback');
+  const row = document.getElementById('riddle-input-row');
+  const answer = input.value.trim().toLowerCase();
+  if (!answer) return;
+  const correct = RIDDLES[g3.idx].a.some(a => answer === a || answer.includes(a) || a.includes(answer) && answer.length > 2);
+  if (correct) {
+    row.className = 'riddle-input-row glow';
+    feedback.className = 'riddle-feedback correct';
+    feedback.textContent = '✓ Correct. You think like an engineer.';
+    playTone(880, 0.2);
+    input.disabled = true;
+    g3.idx++;
+    if (g3.idx >= RIDDLES.length) {
+      setTimeout(() => {
+        state.task3Done = true;
+        feedback.textContent = '✓ All riddles solved. The final secret awaits.';
+        setTimeout(() => completeTask(3), 800);
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        input.disabled = false;
+        showRiddle(g3.idx);
+      }, 1400);
+    }
+  } else {
+    row.className = 'riddle-input-row';
+    void row.offsetWidth;
+    row.className = 'riddle-input-row shake';
+    feedback.className = 'riddle-feedback wrong';
+    feedback.textContent = '✗ Think again...';
+    playTone(150, 0.3, 'sawtooth', 0.15);
+    setTimeout(() => row.classList.remove('shake'), 400);
+    input.value = '';
+  }
+}
+
+// ======== SHARE ========
+function shareSecret() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const tooltip = document.querySelector('.share-tooltip');
+    gsap.to(tooltip, { opacity: 1, duration: 0.2 });
+    setTimeout(() => gsap.to(tooltip, { opacity: 0, duration: 0.3 }), 2000);
+  });
+}
+
+// ======== REVEAL SUBTITLE TYPEWRITER ========
+function typeRevealSubtitle() {
+  const el = document.getElementById('reveal-subtitle');
+  typewriterText(el, 'is a certified genius and exceptional software engineer.', 45);
+}
+
+// ======== MAIN ANIMATIONS ========
+function initAnimations() {
+  // Show UI elements
+  gsap.to('#progress-tracker', { opacity: 1, duration: 1, delay: 0.5 });
+  gsap.to('#sound-btn', { opacity: 1, duration: 1, delay: 0.5 });
+
+  // Hero
+  const heroTL = gsap.timeline({ delay: 0.3 });
+  heroTL
+    .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' })
+    .to('#hero-headline', {
+      duration: 2.5,
+      text: { value: 'Someone wants you to know something.', delimiter: '' },
+      ease: 'none'
+    }, '-=0.2')
+    .to('.hero-sub', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.5')
+    .to('.scroll-hint', { opacity: 1, duration: 0.6 });
+
+  // Mystery words
+  const words = gsap.utils.toArray('.mystery-word');
+  words.forEach((w, i) => {
+    gsap.to(w, {
+      opacity: 1,
+      x: 0,
+      duration: 0.7,
+      ease: 'back.out(1.7)',
+      scrollTrigger: {
+        trigger: w,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse'
+      }
+    });
+  });
+
+  // Silhouette
+  ScrollTrigger.create({
+    trigger: '#section-mystery',
+    start: 'top top',
+    end: 'bottom top',
+    scrub: 1,
+    onEnter: () => gsap.to('#silhouette-container', { opacity: 1, duration: 0.5 }),
+    onUpdate: self => {
+      const blur = 18 * (1 - self.progress * 0.5);
+      gsap.set('#silhouette', { filter: `blur(${blur}px)` });
+    }
+  });
+
+  // Show game 1 modal when section enters
+  ScrollTrigger.create({
+    trigger: '#section-task1',
+    start: 'top 60%',
+    once: true,
+    onEnter: () => {
+      if (!state.task1Done) {
+        blockScroll();
+        setTimeout(() => showModal('modal-game1'), 300);
+      }
+    }
+  });
+
+  // Clue cards — horizontal scroll (desktop only)
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 769px)', () => {
+    const track = document.getElementById('clues-track');
+    const panels = gsap.utils.toArray('.clue-panel');
+    gsap.to(track, {
+      x: () => -(track.scrollWidth - window.innerWidth) + 'px',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#section-clues',
+        start: 'top top',
+        end: () => '+=' + (track.scrollWidth - window.innerWidth),
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: self => {
+          const progress = self.progress;
+          panels.forEach((panel, i) => {
+            const card = panel.querySelector('.clue-card');
+            const threshold = i / panels.length;
+            if (progress >= threshold) card.classList.add('visible');
+          });
+        }
+      }
+    });
+  });
+
+  // Show game 2 modal
+  ScrollTrigger.create({
+    trigger: '#section-task2',
+    start: 'top 60%',
+    once: true,
+    onEnter: () => {
+      if (!state.task2Done) {
+        blockScroll();
+        setTimeout(() => showModal('modal-game2'), 300);
+      }
+    }
+  });
+
+  // Evidence stats
+  gsap.utils.toArray('.stat-item').forEach((item, i) => {
+    gsap.to(item, {
+      opacity: 1, y: 0, duration: 0.7, delay: i * 0.15,
+      ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: item, start: 'top 80%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  // Counter animations
+  ScrollTrigger.create({
+    trigger: '#section-evidence',
+    start: 'top 60%',
+    once: true,
+    onEnter: () => {
+      gsap.to({ val: 0 }, {
+        val: 847293,
+        duration: 2.5,
+        ease: 'power2.out',
+        onUpdate: function() {
+          document.getElementById('stat-lines').textContent = Math.round(this.targets()[0].val).toLocaleString();
+        }
+      });
+      gsap.to({ val: 0 }, {
+        val: 12847,
+        duration: 2.2,
+        ease: 'power2.out',
+        onUpdate: function() {
+          document.getElementById('stat-bugs').textContent = Math.round(this.targets()[0].val).toLocaleString();
+        }
+      });
+      // Coffee counts up then shows ∞
+      gsap.to({ val: 0 }, {
+        val: 9999,
+        duration: 2,
+        ease: 'power2.out',
+        onUpdate: function() {
+          document.getElementById('stat-coffee').textContent = Math.round(this.targets()[0].val).toLocaleString();
+        },
+        onComplete: () => {
+          document.getElementById('stat-coffee').textContent = '∞';
+        }
+      });
+
+      // GitHub graph fill
+      const cells = document.querySelectorAll('.gh-cell');
+      gsap.to('#github-container', { opacity: 1, y: 0, duration: 0.6 });
+      cells.forEach((cell, i) => {
+        setTimeout(() => {
+          const level = cell.dataset.level;
+          if (level > 0) cell.className = `gh-cell level-${level}`;
+        }, i * 4);
+      });
+    }
+  });
+
+  // Evidence quote
+  gsap.to('#evidence-quote', {
+    opacity: 1, y: 0, duration: 1,
+    scrollTrigger: { trigger: '#evidence-quote', start: 'top 80%', toggleActions: 'play none none reverse' }
+  });
+
+  // Game 3 modal
+  ScrollTrigger.create({
+    trigger: '#section-task3',
+    start: 'top 60%',
+    once: true,
+    onEnter: () => {
+      if (!state.task3Done) {
+        blockScroll();
+        setTimeout(() => showModal('modal-game3'), 300);
+      }
+    }
+  });
+
+  // Buildup
+  gsap.to('#buildup-text', {
+    opacity: 1, y: 0, duration: 0.8, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '#section-buildup', start: 'top 70%', toggleActions: 'play none none reverse' }
+  });
+  gsap.to('#buildup-sub', {
+    opacity: 1, y: 0, duration: 0.8, delay: 0.2,
+    scrollTrigger: { trigger: '#section-buildup', start: 'top 70%', toggleActions: 'play none none reverse' }
+  });
+  ['cd-3','cd-2','cd-1'].forEach((id, i) => {
+    gsap.to('#'+id, {
+      opacity: 1, scale: 1, duration: 0.6, delay: i * 0.3, ease: 'back.out(1.7)',
+      scrollTrigger: { trigger: '#section-buildup', start: 'top 50%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  // Reveal section
+  ScrollTrigger.create({
+    trigger: '#section-reveal',
+    start: 'top 70%',
+    once: true,
+    onEnter: () => {
+      const tl = gsap.timeline();
+      tl.to('#reveal-avatar', { opacity: 1, duration: 0.6, ease: 'power2.out' })
+        .to('#reveal-label', { opacity: 1, duration: 0.5 }, '-=0.2')
+        .to('#reveal-name', {
+          opacity: 1, scale: 1, y: 0, duration: 1,
+          ease: 'elastic.out(1, 0.4)'
+        }, '+=0.1')
+        .add(() => typeRevealSubtitle(), '+=0.3')
+        .to('#reveal-subtitle', { opacity: 1, duration: 0.3 }, '<')
+        .to('#reveal-message', { opacity: 1, duration: 0.8, ease: 'power2.out' }, '+=1.8')
+        .to('#share-btn', { opacity: 1, duration: 0.5 }, '-=0.3')
+        .add(() => {
+          launchConfetti();
+          playFanfare();
+        }, 0.5);
+    }
+  });
+}
+</script>
+</body>
+</html>

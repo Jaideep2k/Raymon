@@ -1,0 +1,8 @@
+{
+  "name": "raymon-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cmd /c start.bat"
+  }
+}
